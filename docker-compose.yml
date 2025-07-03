@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    environment:
+      - DB_HOST=mysql
+      - DB_NAME=xrpspecter
+      - DB_USER=xrpspecter
+      - DB_PASS=xrpspecter123
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: xrpspecter
+      MYSQL_USER: xrpspecter
+      MYSQL_PASSWORD: xrpspecter123
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./xrpspecter.sql:/docker-entrypoint-initdb.d/xrpspecter.sql
+    restart: unless-stopped
+
+volumes:
+  mysql_data: 
